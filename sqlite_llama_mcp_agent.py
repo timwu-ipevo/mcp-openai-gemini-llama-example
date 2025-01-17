@@ -130,7 +130,6 @@ async def agent_loop(query: str, tools: dict, messages: List[dict] = None):
     # add user query to the messages list
     messages.append({"role": "user", "content": query})
 
-    print("\nMessages:", messages)
     # Query LLM with the system prompt, user query, and available tools
     first_response = await client.chat.completions.create(
         model=MODEL_ID,
