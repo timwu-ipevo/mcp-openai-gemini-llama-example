@@ -20,8 +20,8 @@ This code sets up a simple CLI agent that can interact with a SQLite database th
 
 1.  Clone the repository:
     ```bash
-    git clone [YOUR_REPO_URL]
-    cd [YOUR_REPO_NAME]
+    git clone https://github.com/philschmid/mcp-openai-gemini-llama-example
+    cd mcp-openai-gemini-llama-example
     ```
 2.  Install the required packages:
     ```bash
