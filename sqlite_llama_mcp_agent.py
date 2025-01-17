@@ -96,7 +96,7 @@ class MCPClient:
         return callable
 
 
-async def agent_loop(query: str, tools: dict):
+async def agent_loop(query: str, tools: dict, messages: List[dict] = None):
     """
     Main interaction loop that processes user queries using the LLM and available tools.
 
@@ -108,21 +108,29 @@ async def agent_loop(query: str, tools: dict):
     Args:
         query: User's input question or command
         tools: Dictionary of available database tools and their schemas
+        messages: List of messages to pass to the LLM, defaults to None
     """
-    messages = [
-        {
-            "role": "system",
-            "content": SYSTEM_PROMPT.format(
-                tools="\n- ".join(
-                    [
-                        f"{t['name']}: {t['schema']['function']['description']}"
-                        for t in tools.values()
-                    ]
-                )
-            ),  # Creates System prompt based on available MCP server tools
-        },
-        {"role": "user", "content": query},  # User query
-    ]
+    messages = (
+        [
+            {
+                "role": "system",
+                "content": SYSTEM_PROMPT.format(
+                    tools="\n- ".join(
+                        [
+                            f"{t['name']}: {t['schema']['function']['description']}"
+                            for t in tools.values()
+                        ]
+                    )
+                ),  # Creates System prompt based on available MCP server tools
+            },
+        ]
+        if messages is None
+        else messages  # reuse existing messages if provided
+    )
+    # add user query to the messages list
+    messages.append({"role": "user", "content": query})
+
+    print("\nMessages:", messages)
     # Query LLM with the system prompt, user query, and available tools
     first_response = await client.chat.completions.create(
         model=MODEL_ID,
@@ -173,8 +181,13 @@ async def agent_loop(query: str, tools: dict):
     else:
         raise ValueError(f"Unknown stop reason: {stop_reason}")
 
-    # Return the LLM response
-    return new_response.choices[0].message.content
+    # Add the LLM response to the messages list
+    messages.append(
+        {"role": "assistant", "content": new_response.choices[0].message.content}
+    )
+
+    # Return the LLM response and messages
+    return new_response.choices[0].message.content, messages
 
 
 async def main():
@@ -224,6 +237,7 @@ async def main():
         }
 
         # Start interactive prompt loop for user queries
+        messages = None
         while True:
             try:
                 # Get user input and check for exit commands
@@ -232,9 +246,9 @@ async def main():
                     break
 
                 # Process the prompt and run agent loop
-                response = await agent_loop(user_input, tools)
+                response, messages = await agent_loop(user_input, tools, messages)
                 print("\nResponse:", response)
-
+                # print("\nMessages:", messages)
             except KeyboardInterrupt:
                 print("\nExiting...")
                 break
