@@ -1,20 +1,21 @@
 # How to use Anthropic MCP Server with open LLMs, OpenAI or Google Gemini
 
-This repository contains a basic example of how to build an AI agent using the Model Context Protocol (MCP) with an open LLM (Meta Llama 3), and a SQLite database. It's designed to be a simple, educational demonstration, not a production-ready framework.
+This repository contains a basic example of how to build an AI agent using the Model Context Protocol (MCP) with an open LLM (Meta Llama 3), OpenAI or Google Gemini, and a SQLite database. It's designed to be a simple, educational demonstration, not a production-ready framework.
 
-## What it does
+## Setup
 
 This code sets up a simple CLI agent that can interact with a SQLite database through an MCP server. It uses the official SQLite MCP server and demonstrates:
 
 *   Connecting to an MCP server
 *   Loading and using tools and resources from the MCP server
 *   Converting tools into LLM-compatible function calls
-*   Interacting with an LLM using the `openai` SDK.
+*   Interacting with an LLM using the `openai` SDK or `google-genai` SDK.
 
 ## How to use it
 
 *   Docker installed and running.
 *   Hugging Face account and an access token (for using the Llama 3 model).
+*   Google API key (for using the Gemini model).
 
 ### Installation
 
@@ -33,7 +34,9 @@ This code sets up a simple CLI agent that can interact with a SQLite database th
     huggingface-cli login --token YOUR_TOKEN
     ```
 
-### Running the agent
+## Examples
+
+### Llama 3
    
 Run the following command
 
@@ -52,6 +55,14 @@ Response:  The available tables are: albums, artists, customers, employees, genr
 Enter your prompt (or 'quit' to exit): how many artists are there
 
 Response:  There are 275 artists in the database.
+```
+
+### Gemini
+
+Run the following command
+
+```bash
+GOOGLE_API_KEY=YOUR_API_KEY python sqlite_gemini_mcp_agent.py
 ```
 
 ## Future plans
