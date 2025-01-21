@@ -26,7 +26,7 @@ This code sets up a simple CLI agent that can interact with a SQLite database th
     ```
 2.  Install the required packages:
     ```bash
-    pip install huggingface_hub openai mcp
+    pip install -r requirements.txt
     ```
 
 3. Log in to Hugging Face
