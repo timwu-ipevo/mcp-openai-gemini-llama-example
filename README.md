@@ -2,6 +2,9 @@
 
 This repository contains a basic example of how to build an AI agent using the Model Context Protocol (MCP) with an open LLM (Meta Llama 3), OpenAI or Google Gemini, and a SQLite database. It's designed to be a simple, educational demonstration, not a production-ready framework.
 
+OpenAI example: https://github.com/jalr4ever/Tiny-OAI-MCP-Agent
+
+
 ## Setup
 
 This code sets up a simple CLI agent that can interact with a SQLite database through an MCP server. It uses the official SQLite MCP server and demonstrates:
